@@ -1,9 +1,11 @@
+import http.server
 import json
 import os
 import random
 import subprocess
 import sys
 import tempfile
+import threading
 import unittest
 import urllib.error
 
@@ -150,6 +152,43 @@ class Backoff(unittest.TestCase):
                 backoff.get(m.url, tries=3, sleep=lambda s: None)
         self.assertEqual(e.exception.code, 429)
         self.assertEqual(m.hits, 3)
+
+    def test_token_is_not_sent_to_another_origin(self):
+        seen = {}
+
+        class Target(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                seen["token"] = self.headers.get("PRIVATE-TOKEN")
+                self.send_response(200)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+
+            def log_message(self, *args):
+                pass
+
+        target = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Target)
+        threading.Thread(target=target.serve_forever, daemon=True).start()
+        other = f"http://127.0.0.1:{target.server_address[1]}/elsewhere"
+
+        class Redirect(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(302)
+                self.send_header("Location", other)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+
+            def log_message(self, *args):
+                pass
+
+        origin = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Redirect)
+        threading.Thread(target=origin.serve_forever, daemon=True).start()
+        try:
+            status, _, _ = backoff.get(f"http://127.0.0.1:{origin.server_address[1]}/x", token="secret")
+        finally:
+            target.shutdown(); origin.shutdown()
+            target.server_close(); origin.server_close()
+        self.assertEqual(status, 200)
+        self.assertIsNone(seen["token"])
 
     def test_retry_after_http_date_and_garbage(self):
         now = lambda: 1_000_000.0  # noqa: E731

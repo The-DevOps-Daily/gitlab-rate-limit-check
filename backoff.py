@@ -17,7 +17,23 @@ import email.utils
 import random
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
+
+
+class SameOriginRedirect(urllib.request.HTTPRedirectHandler):
+    """Follow redirects, but send the token only to the same scheme, host and port."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is not None:
+            old, nxt = urllib.parse.urlsplit(req.full_url), urllib.parse.urlsplit(new.full_url)
+            if (old.scheme, old.hostname, old.port) != (nxt.scheme, nxt.hostname, nxt.port):
+                new.remove_header("Private-token")
+        return new
+
+
+OPENER = urllib.request.build_opener(SameOriginRedirect)
 
 
 def retry_after_seconds(value, now):
@@ -40,7 +56,7 @@ def get(url, token=None, tries=6, base=1.0, cap=60.0, low_water=5, sleep=time.sl
     for attempt in range(tries):
         req = urllib.request.Request(url, headers=headers)
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with OPENER.open(req, timeout=30) as resp:
                 h = resp.headers
                 body = resp.read()
                 try:
