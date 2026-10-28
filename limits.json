@@ -1,0 +1,20 @@
+{
+  "source": "https://docs.gitlab.com/user/gitlab_com/rate_limits/",
+  "retrieved": "2026-10-28",
+  "status": "GitLab announced Free and unauthenticated limits for 2026-10-19 and Premium/Ultimate for January 2027; the docs page still called them proposed when retrieved",
+  "sustained_per_hour": {
+    "anonymous_per_ip": 60,
+    "free": 5000,
+    "premium": 15000,
+    "ultimate": 25000
+  },
+  "burst_per_minute": {
+    "free": 100,
+    "premium": 1250,
+    "ultimate": 2000
+  },
+  "current_per_minute": {
+    "unauthenticated_per_ip": 500,
+    "authenticated_api_per_user": 2000
+  }
+}

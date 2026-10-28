@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# curl for GitLab, with a request log for budget.py.
+#
+#   export GLCURL_LOG=gitlab-requests.jsonl
+#   export GLCURL_EGRESS=runners-nat-1      # which public IP this machine leaves from
+#   export GLCURL_CALLER=release-bot        # the GitLab user behind the token, if any
+#   ./glcurl --header "PRIVATE-TOKEN: $TOKEN" https://gitlab.com/api/v4/projects/42
+#
+# Passes every argument to curl and appends one JSON line per invocation: time,
+# egress, caller (anon, GLCURL_CALLER, or a short hash of the token), path, final
+# status, the number of HTTP responses (redirects followed with -L count too) and
+# the rate-limit headers of the last response. The token itself is never logged.
+# One URL per call, and no --retry: budget.py needs every request to be counted.
+set -uo pipefail
+
+log=${GLCURL_LOG:-gitlab-requests.jsonl}
+url="" who=anon
+for a in "$@"; do
+  case "$a" in
+    http://*|https://*) [[ -n $url ]] && { echo "glcurl: one URL per call" >&2; exit 2; }; url=$a ;;
+    --retry*) echo "glcurl: --retry hides requests from the log; retry in your script instead" >&2; exit 2 ;;
+  esac
+  shopt -s nocasematch
+  case "$a" in
+    *private-token:*|*job-token:*|*authorization:*) who=$(printf '%s' "${a#*:}" | sha256sum | cut -c1-8) ;;
+    -K|--config|--config=*|@*) who=unknown ;;
+  esac
+  shopt -u nocasematch
+done
+[[ -n ${GLCURL_CALLER:-} && $who != anon ]] && who=$GLCURL_CALLER
+
+headers=$(mktemp)
+trap 'rm -f "$headers"' EXIT
+curl -D "$headers" "$@"
+rc=$?
+
+python3 - "$headers" "$log" "$who" "${GLCURL_EGRESS:-$(hostname)}" "$url" "$rc" <<'EOF'
+import json, sys, time, urllib.parse
+headers_file, log, who, egress, url, rc = sys.argv[1:]
+blocks, cur = [], None
+for line in open(headers_file, errors="replace"):
+    line = line.rstrip("\r\n")
+    if line.startswith("HTTP/"):
+        cur = {"status": int(line.split()[1]), "line": line, "h": {}}
+        blocks.append(cur)
+    elif cur is not None and ":" in line:
+        k, v = line.split(":", 1)
+        cur["h"][k.strip().lower()] = v.strip()
+# 1xx interim responses and a proxy's "Connection established" are not requests to GitLab.
+real = [b for b in blocks if b["status"] >= 200 and "connection established" not in b["line"].lower()]
+last = real[-1] if real else {"status": 0, "h": {}}
+row = {
+    "ts": round(time.time(), 3), "egress": egress, "who": who,
+    "path": urllib.parse.urlsplit(url).path, "status": last["status"], "curl_exit": int(rc),
+    "requests": max(1, len(real)),
+    "name": last["h"].get("ratelimit-name", ""), "remaining": last["h"].get("ratelimit-remaining", ""),
+    "retry_after": last["h"].get("retry-after", ""),
+}
+with open(log, "a") as f:
+    f.write(json.dumps(row) + "\n")
+EOF
+exit $rc

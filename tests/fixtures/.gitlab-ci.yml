@@ -1,0 +1,20 @@
+# Fixture: a pipeline with a mix of anonymous and authenticated GitLab calls.
+stages: [build]
+
+build:
+  stage: build
+  script:
+    # anonymous raw file from another project: counts against the runner IP
+    - curl -fsSL https://gitlab.com/acme/tools/-/raw/main/install.sh | sh
+    # authenticated with the job token: fine
+    - curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/42/packages/generic/tool/1.2/tool.tgz" -o tool.tgz
+    # anonymous API call through the predefined variable
+    - wget -q "$CI_API_V4_URL/projects/42/releases" -O releases.json
+    # git clone over HTTPS is not counted against the anonymous limit
+    - git clone https://gitlab.com/acme/public-config.git
+    # multi-line command with a token on the continuation line: fine
+    - curl -fsS \
+        --header "PRIVATE-TOKEN: $READ_API_TOKEN" \
+        "https://gitlab.com/api/v4/projects/42/repository/files/ci%2Fvalues.yaml/raw?ref=main"
+    # anonymous archive download
+    - curl -fsSLo src.tgz https://gitlab.com/acme/lib/-/archive/v2.0/lib-v2.0.tar.gz

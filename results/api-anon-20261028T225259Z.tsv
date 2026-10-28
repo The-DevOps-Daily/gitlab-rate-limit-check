@@ -1,0 +1,72 @@
+# probe.sh sha256=a1d6a890c6f9 url=https://gitlab.com/api/v4/projects/dwt1%2Fdotfiles started=2026-10-28T22:52:59Z
+n	utc	status	cf_cache	ratelimit_name	limit	remaining	retry_after
+1	22:52:59	200	BYPASS	throttle_unauthenticated_api	500	498	
+2	22:53:01	200	BYPASS	throttle_unauthenticated_api	500	497	
+3	22:53:02	200	BYPASS	throttle_unauthenticated_api	500	496	
+4	22:53:04	200	BYPASS	throttle_unauthenticated_api	500	495	
+5	22:53:05	200	BYPASS	throttle_unauthenticated_api	500	494	
+6	22:53:07	200	BYPASS	throttle_unauthenticated_api	500	493	
+7	22:53:08	200	BYPASS	throttle_unauthenticated_api	500	492	
+8	22:53:09	200	BYPASS	throttle_unauthenticated_api	500	491	
+9	22:53:11	200	BYPASS	throttle_unauthenticated_api	500	490	
+10	22:53:12	200	BYPASS	throttle_unauthenticated_api	500	489	
+11	22:53:14	200	BYPASS	throttle_unauthenticated_api	500	488	
+12	22:53:15	200	BYPASS	throttle_unauthenticated_api	500	487	
+13	22:53:17	200	BYPASS	throttle_unauthenticated_api	500	486	
+14	22:53:19	200	BYPASS	throttle_unauthenticated_api	500	485	
+15	22:53:20	200	BYPASS	throttle_unauthenticated_api	500	484	
+16	22:53:21	200	BYPASS	throttle_unauthenticated_api	500	483	
+17	22:53:23	200	BYPASS	throttle_unauthenticated_api	500	482	
+18	22:53:24	200	BYPASS	throttle_unauthenticated_api	500	481	
+19	22:53:26	200	BYPASS	throttle_unauthenticated_api	500	480	
+20	22:53:27	200	BYPASS	throttle_unauthenticated_api	500	479	
+21	22:53:29	200	BYPASS	throttle_unauthenticated_api	500	478	
+22	22:53:30	200	BYPASS	throttle_unauthenticated_api	500	477	
+23	22:53:32	200	BYPASS	throttle_unauthenticated_api	500	476	
+24	22:53:33	200	BYPASS	throttle_unauthenticated_api	500	475	
+25	22:53:35	200	BYPASS	throttle_unauthenticated_api	500	474	
+26	22:53:36	200	BYPASS	throttle_unauthenticated_api	500	473	
+27	22:53:37	200	BYPASS	throttle_unauthenticated_api	500	472	
+28	22:53:39	200	BYPASS	throttle_unauthenticated_api	500	471	
+29	22:53:40	200	BYPASS	throttle_unauthenticated_api	500	470	
+30	22:53:42	200	BYPASS	throttle_unauthenticated_api	500	469	
+31	22:53:45	200	BYPASS	throttle_unauthenticated_api	500	468	
+32	22:53:46	200	BYPASS	throttle_unauthenticated_api	500	467	
+33	22:53:48	200	BYPASS	throttle_unauthenticated_api	500	466	
+34	22:53:49	200	BYPASS	throttle_unauthenticated_api	500	465	
+35	22:53:51	200	BYPASS	throttle_unauthenticated_api	500	499	
+36	22:53:52	200	BYPASS	throttle_unauthenticated_api	500	498	
+37	22:53:53	200	BYPASS	throttle_unauthenticated_api	500	497	
+38	22:53:55	200	BYPASS	throttle_unauthenticated_api	500	496	
+39	22:53:56	200	BYPASS	throttle_unauthenticated_api	500	495	
+40	22:53:58	200	BYPASS	throttle_unauthenticated_api	500	494	
+41	22:53:59	200	BYPASS	throttle_unauthenticated_api	500	493	
+42	22:54:01	200	BYPASS	throttle_unauthenticated_api	500	492	
+43	22:54:02	200	BYPASS	throttle_unauthenticated_api	500	491	
+44	22:54:04	200	BYPASS	throttle_unauthenticated_api	500	490	
+45	22:54:05	200	BYPASS	throttle_unauthenticated_api	500	489	
+46	22:54:07	200	BYPASS	throttle_unauthenticated_api	500	488	
+47	22:54:08	200	BYPASS	throttle_unauthenticated_api	500	487	
+48	22:54:10	200	BYPASS	throttle_unauthenticated_api	500	486	
+49	22:54:11	200	BYPASS	throttle_unauthenticated_api	500	485	
+50	22:54:13	200	BYPASS	throttle_unauthenticated_api	500	484	
+51	22:54:14	200	BYPASS	throttle_unauthenticated_api	500	483	
+52	22:54:16	200	BYPASS	throttle_unauthenticated_api	500	482	
+53	22:54:17	200	BYPASS	throttle_unauthenticated_api	500	481	
+54	22:54:18	200	BYPASS	throttle_unauthenticated_api	500	480	
+55	22:54:20	200	BYPASS	throttle_unauthenticated_api	500	479	
+56	22:54:21	200	BYPASS	throttle_unauthenticated_api	500	478	
+57	22:54:23	200	BYPASS	throttle_unauthenticated_api	500	477	
+58	22:54:24	200	BYPASS	throttle_unauthenticated_api	500	476	
+59	22:54:26	429	BYPASS	unauthenticated_traffic_per_ip			334
+60	22:54:27	429	BYPASS	unauthenticated_traffic_per_ip			333
+61	22:54:29	429	BYPASS	unauthenticated_traffic_per_ip			332
+62	22:54:30	429	BYPASS	unauthenticated_traffic_per_ip			330
+63	22:54:31	429	BYPASS	unauthenticated_traffic_per_ip			329
+64	22:54:33	429	BYPASS	unauthenticated_traffic_per_ip			327
+65	22:54:34	429	BYPASS	unauthenticated_traffic_per_ip			326
+66	22:54:36	429	BYPASS	unauthenticated_traffic_per_ip			325
+67	22:54:37	429	BYPASS	unauthenticated_traffic_per_ip			323
+68	22:54:38	429	BYPASS	unauthenticated_traffic_per_ip			322
+69	22:54:40	429	BYPASS	unauthenticated_traffic_per_ip			320
+70	22:54:41	429	BYPASS	unauthenticated_traffic_per_ip			319

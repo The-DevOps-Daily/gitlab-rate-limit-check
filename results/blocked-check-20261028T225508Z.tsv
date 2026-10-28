@@ -1,0 +1,7 @@
+# blocked-check 2026-10-28T22:55:08Z: requests sent while dwt1/dotfiles returned 429
+22:55:09	429	unauthenticated_traffic_per_ip	291	https://gitlab.com/api/v4/projects/dwt1%2Fdotfiles
+22:55:09	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+22:55:10	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab
+22:55:10	429	unauthenticated_traffic_per_ip	290	https://gitlab.com/api/v4/version
+22:55:10	429	unauthenticated_traffic_per_ip	290	https://gitlab.com/api/v4/projects/CalcProgrammer1%2FOpenRGB
+22:55:11	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/inkscape%2Finkscape

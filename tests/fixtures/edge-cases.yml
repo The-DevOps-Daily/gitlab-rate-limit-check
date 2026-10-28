@@ -1,0 +1,15 @@
+edge:
+  script:
+    # an authenticated first command must not hide the anonymous second one
+    - curl -H "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/1/releases"; curl -fsS https://gitlab.com/api/v4/version
+    # git clone first, anonymous curl after it
+    - git clone https://gitlab.com/acme/a.git && curl -fsSLO https://gitlab.com/acme/a/-/raw/main/b.sh
+    - curl -fsSL https://gitlab.com/acme/c/-/raw/main/d.sh # CI_JOB_TOKEN is not used here
+    # another host that only starts with gitlab.com
+    - curl -fsSL https://gitlab.com.example.org/acme/x
+    # lowercase header name
+    - curl -fsS -H "job-token: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/1/packages"
+    # folded command without backslashes
+    - >
+      curl -fsSL
+      https://gitlab.com/acme/e/-/archive/v1/e-v1.tar.gz

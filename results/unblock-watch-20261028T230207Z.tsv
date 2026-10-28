@@ -1,0 +1,15 @@
+# unblock-watch.sh sha256=58495fb1cc5e url=https://gitlab.com/api/v4/version interval=180 started=2026-10-28T23:02:07Z
+utc	status	ratelimit_name	retry_after
+23:02:07	429	unauthenticated_traffic_per_ip	3473
+23:05:08	429	unauthenticated_traffic_per_ip	3292
+23:08:08	429	unauthenticated_traffic_per_ip	3112
+23:11:08	429	unauthenticated_traffic_per_ip	2932
+23:14:09	429	unauthenticated_traffic_per_ip	2751
+23:17:09	429	unauthenticated_traffic_per_ip	2571
+23:20:10	429	unauthenticated_traffic_per_ip	2390
+23:23:10	429	unauthenticated_traffic_per_ip	2210
+23:26:11	429	unauthenticated_traffic_per_ip	2030
+23:29:11	429	unauthenticated_traffic_per_ip	1849
+23:32:11	429	unauthenticated_traffic_per_ip	1669
+23:35:12	429	unauthenticated_traffic_per_ip	1488
+23:38:12	401	throttle_unauthenticated_api	

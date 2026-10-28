@@ -1,0 +1,23 @@
+# count-test.sh sha256=cce453db8928 started=2026-10-28T23:00:46Z
+step	n	utc	status	ratelimit_name	retry_after	url
+paid	1	23:00:46	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	2	23:00:47	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	3	23:00:49	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	4	23:00:50	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	5	23:00:52	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	6	23:00:53	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	7	23:00:55	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	8	23:00:56	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	9	23:00:58	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+paid	10	23:00:59	200	throttle_unauthenticated_api		https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner
+unscoped	1	23:01:01	429	unauthenticated_traffic_per_ip	3540	https://gitlab.com/api/v4/version
+unscoped	2	23:01:02	429	unauthenticated_traffic_per_ip	3538	https://gitlab.com/api/v4/version
+unscoped	3	23:01:03	429	unauthenticated_traffic_per_ip	3537	https://gitlab.com/api/v4/version
+unscoped	4	23:01:05	429	unauthenticated_traffic_per_ip	3535	https://gitlab.com/api/v4/version
+unscoped	5	23:01:06	429	unauthenticated_traffic_per_ip	3534	https://gitlab.com/api/v4/version
+unscoped	6	23:01:08	429	unauthenticated_traffic_per_ip	3533	https://gitlab.com/api/v4/version
+unscoped	7	23:01:09	429	unauthenticated_traffic_per_ip	3531	https://gitlab.com/api/v4/version
+unscoped	8	23:01:10	429	unauthenticated_traffic_per_ip	3530	https://gitlab.com/api/v4/version
+unscoped	9	23:01:12	429	unauthenticated_traffic_per_ip	3528	https://gitlab.com/api/v4/version
+unscoped	10	23:01:13	429	unauthenticated_traffic_per_ip	3527	https://gitlab.com/api/v4/version
+personal	1	23:01:15	429	unauthenticated_traffic_per_ip	3525	https://gitlab.com/api/v4/projects/dwt1%2Fdotfiles

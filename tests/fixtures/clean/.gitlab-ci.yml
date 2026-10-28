@@ -1,0 +1,4 @@
+test:
+  script:
+    - curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/42/repository/files/Makefile/raw?ref=main"
+    - git clone "https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/acme/private.git"

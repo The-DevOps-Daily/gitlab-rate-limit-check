@@ -1,0 +1,30 @@
+# Manual check, not written by a script. Two plain curl -D - requests to
+# https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/README.md at 22:48:34 and
+# 22:48:37 UTC, two minutes after the cached probe run, filtered with
+# grep -i -E "^HTTP|cache|^age|ratelimit-(remaining|reset|observed)|^date|cf-ray|etag".
+# The content-security-policy line (matched by "cache" in its value) and the
+# cf-ray line, whose suffix names the Cloudflare location, are omitted here.
+HTTP/2 200
+date: Wed, 28 Oct 2026 22:48:34 GMT
+cf-cache-status: HIT
+age: 48
+cache-control: max-age=60, public, must-revalidate, stale-while-revalidate=60, stale-if-error=300, s-maxage=60
+etag: "01187809eb85bb697dcb95bb65e9a21b"
+ratelimit-observed: 6
+ratelimit-remaining: 494
+ratelimit-reset: 1792878180
+---
+HTTP/2 200
+date: Wed, 28 Oct 2026 22:48:37 GMT
+cf-cache-status: HIT
+age: 51
+cache-control: max-age=60, public, must-revalidate, stale-while-revalidate=60, stale-if-error=300, s-maxage=60
+etag: "01187809eb85bb697dcb95bb65e9a21b"
+ratelimit-observed: 6
+ratelimit-remaining: 494
+ratelimit-reset: 1792878180
+---
+# Then three requests with a unique ?nocache= query string:
+HTTP/2 200 cf-cache-status: MISS ratelimit-observed: 2 ratelimit-remaining: 498
+HTTP/2 200 cf-cache-status: MISS ratelimit-observed: 3 ratelimit-remaining: 497
+HTTP/2 200 cf-cache-status: MISS ratelimit-observed: 4 ratelimit-remaining: 496
