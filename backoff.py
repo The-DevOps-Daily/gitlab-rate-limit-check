@@ -10,8 +10,8 @@ Users APIs return 429 with no rate-limit headers). It also slows down before
 the limit: when RateLimit-Remaining drops to `low_water`, it waits for the reset.
 
 For GitLab.com's anonymous per-IP limit, Retry-After points to the end of the
-clock hour, but the block ended 60 minutes after the oldest request that
-counted, so it can be too short or too long. Switch the caller to a token
+clock hour, but the count reset an hour after the first request that counted,
+so it can be too short or too long. Switch the caller to a token
 rather than retrying anonymously.
 """
 import email.utils
