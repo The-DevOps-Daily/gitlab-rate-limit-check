@@ -1,4 +1,5 @@
 import http.server
+import importlib.util
 import json
 import os
 import random
@@ -14,6 +15,10 @@ sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 
 import backoff  # noqa: E402
+
+spec = importlib.util.spec_from_file_location("predict_window", os.path.join(os.path.dirname(HERE), "predict-window.py"))
+predict_window = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(predict_window)
 import budget  # noqa: E402
 import find_anon_calls  # noqa: E402
 from mock_gitlab import MockGitLab  # noqa: E402
@@ -205,3 +210,46 @@ class Backoff(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Window(unittest.TestCase):
+    HOUR = 1793232000  # 2026-10-29T02:00:00Z
+
+    def test_models_disagree_after_the_hour(self):
+        times = [self.HOUR - 3540 + i for i in range(60)]  # 01:01:00 to 01:01:59
+        pw = predict_window
+        self.assertFalse(pw.predict("fixed", times, self.HOUR - 600)[0])
+        self.assertFalse(pw.predict("sliding", times, self.HOUR - 600)[0])
+        self.assertTrue(pw.predict("fixed", times, self.HOUR + 30)[0])
+        self.assertFalse(pw.predict("sliding", times, self.HOUR + 30)[0])
+        self.assertTrue(pw.predict("approx", times, self.HOUR + 30)[0])
+        # at 02:01:30 the requests up to 01:01:30 have left the last 3,600 seconds
+        self.assertEqual(pw.predict("sliding", times, self.HOUR + 90)[1], 29)
+
+    def test_parse_counts_only_unexempt_non_429(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".tsv", delete=False) as f:
+            f.write("# count-test.sh sha256=x started=2026-10-29T23:59:58Z\n"
+                    "step\tn\tutc\tstatus\tratelimit_name\tretry_after\turl\n"
+                    "paid\t1\t23:59:59\t200\t\t\thttps://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner\n"
+                    "unscoped\t1\t00:00:01\t401\t\t\thttps://gitlab.com/api/v4/version\n"
+                    "personal\t1\t00:00:02\t429\tx\t3598\thttps://gitlab.com/api/v4/projects/a%2Fb\n")
+        rows = predict_window.parse(f.name)
+        os.unlink(f.name)
+        self.assertEqual([r[1] for r in rows], [False, True, False])
+        self.assertAlmostEqual(rows[1][0] - rows[0][0], 2.0)  # crossed midnight
+
+    def test_script_records_each_step(self):
+        tmp = tempfile.mkdtemp()
+        with MockGitLab(ok=3, limited=1) as m:
+            import time
+            now = int(time.time())
+            hour = (now // 3600 + 1) * 3600
+            env = dict(os.environ, URL=m.url, IP_CHECK_URL="http://127.0.0.1:9/", RESULTS=tmp,
+                       IP_SECRET_FILE=os.path.join(tmp, "secret"),
+                       P_OFFSET=str(now + 1 - hour), A_OFFSET=str(now + 2 - hour), B_OFFSET=str(now + 3 - hour))
+            subprocess.run([os.path.join(os.path.dirname(HERE), "window-test.sh")], env=env,
+                           check=True, capture_output=True)
+        (name,) = [n for n in os.listdir(tmp) if n.endswith(".tsv")]
+        rows = [l.split("\t") for l in read(tmp, name).splitlines() if not l.startswith(("#", "step"))]
+        self.assertEqual([(r[0], r[3]) for r in rows], [("P", "200"), ("A", "200"), ("B", "200"), ("B", "429")])
+        self.assertIn("ended=", read(tmp, name))

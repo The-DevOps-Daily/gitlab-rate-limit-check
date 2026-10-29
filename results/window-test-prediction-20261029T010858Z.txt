@@ -1,0 +1,19 @@
+# predict-window.py --plan, written 2026-10-29T01:08:58Z, before window-test.sh ran
+$ python3 predict-window.py --plan --spacing 0.2 results/count-test-20261029T010045Z.tsv
+history: 60 counted requests, 01:01:01 to 01:02:27
+P at 01:50:00, A at 02:00:30, burst from 02:01:45 every 0.2 s
+  fixed    P 429, A allowed, burst: 59 allowed before the first 429
+  sliding  P 429, A 429, burst: 35 allowed before the first 429
+  approx   P 429, A allowed, burst: 1 allowed before the first 429
+$ python3 predict-window.py --plan --spacing 0.3 results/count-test-20261029T010045Z.tsv
+history: 60 counted requests, 01:01:01 to 01:02:27
+P at 01:50:00, A at 02:00:30, burst from 02:01:45 every 0.3 s
+  fixed    P 429, A allowed, burst: 59 allowed before the first 429
+  sliding  P 429, A 429, burst: 38 allowed before the first 429
+  approx   P 429, A allowed, burst: 1 allowed before the first 429
+$ python3 predict-window.py --plan --spacing 0.5 results/count-test-20261029T010045Z.tsv
+history: 60 counted requests, 01:01:01 to 01:02:27
+P at 01:50:00, A at 02:00:30, burst from 02:01:45 every 0.5 s
+  fixed    P 429, A allowed, burst: 59 allowed before the first 429
+  sliding  P 429, A 429, burst: 46 allowed before the first 429
+  approx   P 429, A allowed, burst: 1 allowed before the first 429
