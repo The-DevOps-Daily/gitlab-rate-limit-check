@@ -9,9 +9,10 @@ exponential backoff with full jitter when it does not (the Projects, Groups and
 Users APIs return 429 with no rate-limit headers). It also slows down before
 the limit: when RateLimit-Remaining drops to `low_water`, it waits for the reset.
 
-For GitLab.com's anonymous per-IP limit, Retry-After pointed to the end of the
-clock hour and the block lasted longer than that, so treat it as a minimum and
-switch the caller to a token rather than retrying anonymously.
+For GitLab.com's anonymous per-IP limit, Retry-After points to the end of the
+clock hour, but the block ended 60 minutes after the oldest request that
+counted, so it can be too short or too long. Switch the caller to a token
+rather than retrying anonymously.
 """
 import email.utils
 import random

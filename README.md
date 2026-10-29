@@ -25,7 +25,7 @@ Write-up: [DevOps Daily](https://devops-daily.com/posts/) (link updated when the
 
 The first API run was made with an earlier copy of the probe loop, before it became `probe.sh`, and the blocked check was a one-off loop, so those two files have no hash stamp. The other script-written files are stamped with the hash of the script that wrote them. The scripts have changed since (shared `lib.sh`, final status from curl's write-out); the hash in each file names the version that produced it.
 
-The headers of a successful response never mention the new limit: the last 200 before the first 429 still said `RateLimit-Remaining: 476` for the old per-minute throttle. Every `Retry-After` on the 429s pointed to the end of the current clock hour, and the block outlasted the first one by more than half an hour.
+The headers of a successful response never mention the new limit: the last 200 before the first 429 still said `RateLimit-Remaining: 476` for the old per-minute throttle. Every `Retry-After` on the 429s pointed to the end of the current clock hour, but the block ended 60 minutes after the oldest request that counted. A test the next night, with predictions committed before it ran, matched a sliding 60-minute window and neither a clock-hour window nor a weighted estimate. Blocked requests did not count, and the budget was exactly 60.
 
 ## The scripts
 
@@ -36,7 +36,7 @@ The headers of a successful response never mention the new limit: the last 200 b
 - `find_anon_calls.py` finds curl, wget, PowerShell, Dockerfile `ADD` and similar calls to `gitlab.com`, `$CI_SERVER_URL` or `$CI_API_V4_URL` that carry no token, and says what to use instead. Git over HTTPS is skipped: it is not counted against the anonymous limit. Exits 1 on findings, so it can run in CI. It assumes `$CI_SERVER_URL` is gitlab.com.
 - `glcurl` is a curl wrapper that logs one JSON line per call (time, egress, caller, path, final status, number of HTTP responses including followed redirects, rate-limit headers) without logging the token. Set `GLCURL_EGRESS` to the public IP or NAT the machine leaves from, and `GLCURL_CALLER` to the GitLab user behind a token. It accepts one URL per call and refuses `--retry`, so every request ends up in the log.
 - `budget.py` reads those logs and reports each caller's busiest 60-second and 3,600-second window against `limits.json`. Anonymous requests are grouped by egress, because the anonymous limit is per IP; token requests by caller, because plan limits are per user. The sliding windows are a budgeting model: GitLab does not document its counting rule, and we could not determine it.
-- `backoff.py` is a GET that waits `Retry-After` (seconds or an HTTP date) on a 429, falls back to capped exponential backoff with full jitter when a 429 has no usable header, and waits for the reset when `RateLimit-Remaining` gets low. For the anonymous limit, treat `Retry-After` as a minimum.
+- `backoff.py` is a GET that waits `Retry-After` (seconds or an HTTP date) on a 429, falls back to capped exponential backoff with full jitter when a 429 has no usable header, and waits for the reset when `RateLimit-Remaining` gets low. For the anonymous limit, `Retry-After` points to the end of the clock hour while the block ends 60 minutes after the oldest counted request, so it can be too short or too long.
 - `examples/make_nat_log.py` writes a synthetic log (not a measurement) for a CI fleet behind one NAT address, to show `budget.py` output.
 
 ## Tests

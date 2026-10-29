@@ -1,0 +1,7 @@
+# written 2026-10-29T02:10:27Z, before parallel-burst.sh ran
+burst-test-20261029T020555Z: 60 back-to-back 200s from gitlab-org/gitlab-runner, no 429. But
+that burst ran at about 22 requests per 10 s, and the 401 bursts hit the unnamed 429 at
+request 26 after about 10.1 s, so a limit of 25 requests per 10 s would also explain it.
+parallel-burst.sh sends 60 requests to gitlab-org/gitlab-runner, 4 at a time:
+- if the Cloudflare limit counts requests, some get the unnamed 429 (server cloudflare);
+- if it counts error responses, all 60 get 200.
