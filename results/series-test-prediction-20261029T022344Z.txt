@@ -1,0 +1,11 @@
+# written 2026-10-29T02:23:44Z, before series-test.sh ran
+# A sliding window frees B1-B25 (02:01:45 to 02:01:55) by 03:01:56, and C1 (02:03:28) is
+# still inside the window until 03:03:28, so it allows exactly 25. An anchored counter
+# started at B1 and reset at 03:01:45, so it allows 60.
+$ python3 predict-window.py --series 03:02:00 --interval 1.9 results/count-test-20261029T010045Z.tsv results/window-test-20261029T020000Z.tsv results/burst-test-20261029T020328Z.tsv results/burst-test-20261029T020555Z.tsv results/burst-test-20261029T021742Z.tsv
+history: 120 counted requests, 01:01:01 to 02:05:10
+series from 03:02:00 every 1.9 s
+  fixed    60 allowed before the first 429
+  sliding  25 allowed before the first 429
+  approx   3 allowed before the first 429
+  anchored 60 allowed before the first 429

@@ -208,12 +208,9 @@ class Backoff(unittest.TestCase):
         self.assertEqual(waits, [10.0])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class Window(unittest.TestCase):
-    HOUR = 1793232000  # 2026-10-29T02:00:00Z
+    HOUR = 1793239200  # 2026-10-29T02:00:00Z
 
     def test_models_disagree_after_the_hour(self):
         times = [self.HOUR - 3540 + i for i in range(60)]  # 01:01:00 to 01:01:59
@@ -225,6 +222,22 @@ class Window(unittest.TestCase):
         self.assertTrue(pw.predict("approx", times, self.HOUR + 30)[0])
         # at 02:01:30 the requests up to 01:01:30 have left the last 3,600 seconds
         self.assertEqual(pw.predict("sliding", times, self.HOUR + 90)[1], 29)
+        # the anchored counter started at 01:01:00 and is empty again from 02:01:00
+        self.assertFalse(pw.predict("anchored", times, self.HOUR + 59)[0])
+        self.assertEqual(pw.predict("anchored", times, self.HOUR + 61)[1], 0)
+
+    def test_another_limit_is_not_scored_or_counted(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".tsv", delete=False) as f:
+            f.write("# burst-test.sh sha256=x url=https://gitlab.com/api/v4/version started=2026-10-29T02:03:28Z\n"
+                    "step\tn\tutc\tstatus\tratelimit_name\tretry_after\n"
+                    "C\t1\t2026-10-29T02:03:28.118Z\t401\tthrottle_unauthenticated_api\t\n"
+                    "C\t2\t2026-10-29T02:03:38.309Z\t429\t\t60\n"
+                    "C\t3\t2026-10-29T02:03:39.000Z\tERR28\t\t\n"
+                    "D\t1\t2026-10-29T02:05:12.698Z\t429\tunauthenticated_traffic_per_ip\t3287\n")
+        rows = predict_window.parse(f.name)
+        os.unlink(f.name)
+        self.assertEqual([(r["observed"], r["counted"]) for r in rows],
+                         [(True, True), (False, False), (False, False), (True, False)])
 
     def test_parse_counts_only_unexempt_non_429(self):
         with tempfile.NamedTemporaryFile("w", suffix=".tsv", delete=False) as f:
@@ -235,8 +248,8 @@ class Window(unittest.TestCase):
                     "personal\t1\t00:00:02\t429\tx\t3598\thttps://gitlab.com/api/v4/projects/a%2Fb\n")
         rows = predict_window.parse(f.name)
         os.unlink(f.name)
-        self.assertEqual([r[1] for r in rows], [False, True, False])
-        self.assertAlmostEqual(rows[1][0] - rows[0][0], 2.0)  # crossed midnight
+        self.assertEqual([r["counted"] for r in rows], [False, True, False])
+        self.assertAlmostEqual(rows[1]["t"] - rows[0]["t"], 2.0)  # crossed midnight
 
     def test_script_records_each_step(self):
         tmp = tempfile.mkdtemp()
@@ -253,3 +266,7 @@ class Window(unittest.TestCase):
         rows = [l.split("\t") for l in read(tmp, name).splitlines() if not l.startswith(("#", "step"))]
         self.assertEqual([(r[0], r[3]) for r in rows], [("P", "200"), ("A", "200"), ("B", "200"), ("B", "429")])
         self.assertIn("ended=", read(tmp, name))
+
+
+if __name__ == "__main__":
+    unittest.main()
