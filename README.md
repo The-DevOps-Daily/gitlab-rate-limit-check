@@ -8,7 +8,7 @@ python3 budget.py --plan free gitlab-requests.jsonl   # busiest minute and hour 
 
 GitLab.com announced plan-based rate limits for Free and unauthenticated traffic from 2026-10-19, with Premium and Ultimate following in January 2027. Unauthenticated requests get 60 per hour per IP address. This repo measures what that looks like from the client side and gives you three tools to get ahead of it.
 
-Write-up: [DevOps Daily](https://devops-daily.com/posts/) (link updated when the post is live).
+Write-up: [GitLab.com's 60-requests-an-hour limit is live, and the headers won't warn you](https://devops-daily.com/posts/gitlab-anonymous-rate-limit-60-per-hour)
 
 ## What we measured (2026-10-28 and 29, one IP)
 
