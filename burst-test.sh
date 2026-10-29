@@ -2,8 +2,10 @@
 # window-test.sh's burst was stopped by a 429 with no RateLimit-Name and
 # Retry-After: 60, not by the hourly limit. Which limit was it, and does the
 # hourly limit then stop at exactly 60 requests in the last 3,600 seconds?
-#   C. requests back to back until the first 429; that 429's headers (cf-ray and
-#      cookies removed) and body (IP addresses and ray IDs removed) are saved
+#   C. requests back to back until the first 429; that 429's headers and body
+#      are saved, without cookies, the CSP and the three headers that carry the
+#      Cloudflare ray ID (its suffix names the edge location), and with IP
+#      addresses and ray IDs removed from the body
 #   D. 75 s later, one request every 1.5 s until the first 429
 # If C's burst counts and the window slides, D gets 60 - (counted in the last
 # hour before D) successes, then a 429 named unauthenticated_traffic_per_ip.
@@ -28,7 +30,7 @@ hit() {
 }
 save() {
   { echo "# $1 at $(date -u +%FT%TZ): response headers, then the first 600 bytes of the body"
-    tr -d '\r' < "$hdr" | grep -viE '^(cf-ray|set-cookie|nel|report-to):'
+    tr -d '\r' < "$hdr" | grep -viE '^(cf-ray|x-request-id|x-gitlab-meta|set-cookie|nel|report-to|content-security-policy):'
     head -c 600 "$body" | sed -E 's/[0-9]{1,3}(\.[0-9]{1,3}){3}/<ip>/g; s/[0-9a-fA-F]{0,4}(:[0-9a-fA-F]{0,4}){3,7}/<ip>/g; s/(Ray ID:?[^0-9a-f]*)[0-9a-f]{16}/\1<ray>/Ig'
     echo; } >> "$saved"
 }

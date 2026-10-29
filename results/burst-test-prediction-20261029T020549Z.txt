@@ -1,0 +1,9 @@
+# written 2026-10-29T02:05:49Z, before the second burst-test.sh run
+burst-test-20261029T020328Z: C got 25 x 401, then the unnamed 429 again: server cloudflare,
+no GitLab headers, body "The service is temporarily unavailable due to elevated error rates".
+D got 10 x 401, then unauthenticated_traffic_per_ip, as predicted (35 - 25).
+Every burst so far was 401s. Second run, against gitlab-org/gitlab-runner (200s, not counted
+by the hourly limit, which still blocks this IP):
+- if the Cloudflare limit counts error responses, C gets no 429 in 60 requests;
+- if it counts requests, C stops after about 25 with the same body.
+D should get 60 x 200 either way.

@@ -1,0 +1,38 @@
+# x-request-id, x-gitlab-meta (both carry the Cloudflare ray ID) and content-security-policy removed by hand after the run
+# C26 at 2026-10-29T02:03:38Z: response headers, then the first 600 bytes of the body
+HTTP/2 429 
+date: Thu, 29 Oct 2026 02:03:38 GMT
+content-type: text/plain
+content-length: 100
+retry-after: 60
+cache-control: no-store, private, max-age=0
+expires: Thu, 01 Jan 1970 00:00:01 GMT
+referrer-policy: same-origin
+x-frame-options: SAMEORIGIN
+strict-transport-security: max-age=31536000
+x-content-type-options: nosniff
+server: cloudflare
+
+The service is temporarily unavailable due to elevated error rates. Please retry after a short wait.
+# D11 at 2026-10-29T02:05:13Z: response headers, then the first 600 bytes of the body
+HTTP/2 429 
+date: Thu, 29 Oct 2026 02:05:13 GMT
+content-type: text/plain
+content-length: 95
+cf-cache-status: BYPASS
+cache-control: no-store, private, max-age=0
+retry-after: 3287
+server: cloudflare
+strict-transport-security: max-age=31536000
+vary: Origin
+x-content-type-options: nosniff
+gitlab-lb: haproxy-main-49-lb-gprd
+gitlab-sv: api-gke-us-east1-b
+ratelimit-name: unauthenticated_traffic_per_ip
+ratelimit-reset: 1793242800
+ratelimit-resettime: Thu, 29 Oct 2026 03:00:00 GMT
+referrer-policy: strict-origin-when-cross-origin
+x-runtime: 0.018409
+
+Rate limit exceeded; see https://docs.gitlab.com/user/gitlab_com/rate_limits/ for more details
+
