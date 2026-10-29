@@ -170,6 +170,7 @@ def compare(history, test):
         if r["counted"]:
             times.append(r["t"])
     print("matched: " + ", ".join(f"{m} {hits[m]}/{scored}" for m in MODELS))
+    print("(each model sees the requests GitLab accepted, so this scores single decisions, not the forecast)")
     print("(n = requests counted in that model's window; ? = depends on a request near the window edge; x = wrong)")
 
 
