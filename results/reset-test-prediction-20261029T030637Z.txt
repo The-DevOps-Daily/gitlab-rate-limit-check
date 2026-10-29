@@ -1,0 +1,10 @@
+# written 2026-10-29T03:06:37Z, before reset-test.sh ran
+# series-test-20261029T030400Z matched the anchored model (35 allowed) and not the sliding one (25).
+# The current anchored window started at 03:02:00.5 (series 1, request 1), so it should reset at
+# about 04:02:00.5, while Retry-After said 04:00:00. Requests to dwt1/dotfiles (200 when allowed).
+$ python3 predict-window.py --at 04:00:30,04:01:50,04:02:10 --burst-at 04:02:15 --spacing 0.45 results/count-test-20261029T010045Z.tsv results/window-test-20261029T020000Z.tsv results/burst-test-20261029T020328Z.tsv results/burst-test-20261029T020555Z.tsv results/burst-test-20261029T021742Z.tsv results/series-test-20261029T030200Z.tsv results/series-test-20261029T030400Z.tsv
+history: 180 counted requests, 01:01:01 to 03:05:07
+  fixed    04:00:30 allowed, 04:01:50 allowed, 04:02:10 allowed, burst from 04:02:15 every 0.45 s: 57 allowed
+  sliding  04:00:30 429, 04:01:50 429, 04:02:10 allowed, burst from 04:02:15 every 0.45 s: 9 allowed
+  approx   04:00:30 allowed, 04:01:50 allowed, 04:02:10 allowed, burst from 04:02:15 every 0.45 s: 0 allowed
+  anchored 04:00:30 429, 04:01:50 429, 04:02:10 allowed, burst from 04:02:15 every 0.45 s: 59 allowed

@@ -1,0 +1,39 @@
+# series-test.sh sha256=1e65d7d92ba2 url=https://gitlab.com/api/v4/projects/dwt1%2Fdotfiles start=2026-10-29T03:04:00Z
+step	n	utc	status	ratelimit_name	retry_after	utc_end
+S	1	2026-10-29T03:04:00.142Z	200	throttle_unauthenticated_api		2026-10-29T03:04:00.672Z
+S	2	2026-10-29T03:04:02.177Z	200	throttle_unauthenticated_api		2026-10-29T03:04:02.621Z
+S	3	2026-10-29T03:04:04.126Z	200	throttle_unauthenticated_api		2026-10-29T03:04:04.640Z
+S	4	2026-10-29T03:04:06.145Z	200	throttle_unauthenticated_api		2026-10-29T03:04:06.585Z
+S	5	2026-10-29T03:04:08.090Z	200	throttle_unauthenticated_api		2026-10-29T03:04:08.961Z
+S	6	2026-10-29T03:04:10.466Z	200	throttle_unauthenticated_api		2026-10-29T03:04:10.909Z
+S	7	2026-10-29T03:04:12.414Z	200	throttle_unauthenticated_api		2026-10-29T03:04:12.844Z
+S	8	2026-10-29T03:04:14.349Z	200	throttle_unauthenticated_api		2026-10-29T03:04:14.786Z
+S	9	2026-10-29T03:04:16.293Z	200	throttle_unauthenticated_api		2026-10-29T03:04:16.754Z
+S	10	2026-10-29T03:04:18.259Z	200	throttle_unauthenticated_api		2026-10-29T03:04:18.742Z
+S	11	2026-10-29T03:04:20.247Z	200	throttle_unauthenticated_api		2026-10-29T03:04:20.669Z
+S	12	2026-10-29T03:04:22.177Z	200	throttle_unauthenticated_api		2026-10-29T03:04:22.646Z
+S	13	2026-10-29T03:04:24.150Z	200	throttle_unauthenticated_api		2026-10-29T03:04:24.584Z
+S	14	2026-10-29T03:04:26.089Z	200	throttle_unauthenticated_api		2026-10-29T03:04:26.530Z
+S	15	2026-10-29T03:04:28.036Z	200	throttle_unauthenticated_api		2026-10-29T03:04:28.560Z
+S	16	2026-10-29T03:04:30.066Z	200	throttle_unauthenticated_api		2026-10-29T03:04:30.489Z
+S	17	2026-10-29T03:04:31.994Z	200	throttle_unauthenticated_api		2026-10-29T03:04:32.427Z
+S	18	2026-10-29T03:04:33.935Z	200	throttle_unauthenticated_api		2026-10-29T03:04:34.418Z
+S	19	2026-10-29T03:04:35.923Z	200	throttle_unauthenticated_api		2026-10-29T03:04:36.364Z
+S	20	2026-10-29T03:04:37.869Z	200	throttle_unauthenticated_api		2026-10-29T03:04:38.286Z
+S	21	2026-10-29T03:04:39.795Z	200	throttle_unauthenticated_api		2026-10-29T03:04:40.322Z
+S	22	2026-10-29T03:04:41.826Z	200	throttle_unauthenticated_api		2026-10-29T03:04:42.309Z
+S	23	2026-10-29T03:04:43.814Z	200	throttle_unauthenticated_api		2026-10-29T03:04:44.233Z
+S	24	2026-10-29T03:04:45.740Z	200	throttle_unauthenticated_api		2026-10-29T03:04:46.235Z
+S	25	2026-10-29T03:04:47.740Z	200	throttle_unauthenticated_api		2026-10-29T03:04:48.166Z
+S	26	2026-10-29T03:04:49.671Z	200	throttle_unauthenticated_api		2026-10-29T03:04:50.103Z
+S	27	2026-10-29T03:04:51.611Z	200	throttle_unauthenticated_api		2026-10-29T03:04:52.127Z
+S	28	2026-10-29T03:04:53.632Z	200	throttle_unauthenticated_api		2026-10-29T03:04:54.049Z
+S	29	2026-10-29T03:04:55.553Z	200	throttle_unauthenticated_api		2026-10-29T03:04:55.973Z
+S	30	2026-10-29T03:04:57.481Z	200	throttle_unauthenticated_api		2026-10-29T03:04:57.984Z
+S	31	2026-10-29T03:04:59.489Z	200	throttle_unauthenticated_api		2026-10-29T03:04:59.937Z
+S	32	2026-10-29T03:05:01.442Z	200	throttle_unauthenticated_api		2026-10-29T03:05:01.891Z
+S	33	2026-10-29T03:05:03.399Z	200	throttle_unauthenticated_api		2026-10-29T03:05:03.913Z
+S	34	2026-10-29T03:05:05.418Z	200	throttle_unauthenticated_api		2026-10-29T03:05:05.901Z
+S	35	2026-10-29T03:05:07.410Z	200	throttle_unauthenticated_api		2026-10-29T03:05:07.894Z
+S	36	2026-10-29T03:05:09.399Z	429	unauthenticated_traffic_per_ip	3291	2026-10-29T03:05:09.789Z
+# ended=2026-10-29T03:05:09Z

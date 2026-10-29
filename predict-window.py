@@ -3,6 +3,7 @@
 
     python3 predict-window.py --plan results/count-test-X.tsv                  # window-test.sh
     python3 predict-window.py --series 03:02:00 --interval 1.9 HISTORY...       # series-test.sh
+    python3 predict-window.py --at 04:00:30,04:01:50 HISTORY...                  # reset-test.sh
     python3 predict-window.py --compare results/window-test-Y.tsv results/count-test-X.tsv
 
 The models, each with a limit of 60 per IP:
@@ -135,6 +136,23 @@ def series(history, at, spacing):
         print(f"  {model:8} {allowed} allowed before the first 429")
 
 
+def at(history, times_of_day, burst_at, spacing):
+    times = counted_times(history)
+    day = dt.datetime.fromtimestamp(max(r["t"] for r in history), dt.timezone.utc).date()
+    ts = [dt.datetime.combine(day, dt.time.fromisoformat(x), dt.timezone.utc).timestamp() for x in times_of_day.split(",")]
+    print(f"history: {len(times)} counted requests, {clock(min(times))} to {clock(max(times))}")
+    for model in MODELS:
+        own, cells = list(times), []
+        for t in ts:
+            ok, _, edge = predict(model, own, t)
+            own += [t] if ok else []
+            cells.append(f"{clock(t)} {'allowed' if ok else '429'}{'?' if edge else ''}")
+        if burst_at:
+            b = dt.datetime.combine(day, dt.time.fromisoformat(burst_at), dt.timezone.utc).timestamp()
+            cells.append(f"burst from {clock(b)} every {spacing} s: {run(model, own, b, spacing)[0]} allowed")
+        print(f"  {model:8} " + ", ".join(cells))
+
+
 def compare(history, test):
     times = counted_times(history)
     hits, scored = dict.fromkeys(MODELS, 0), 0
@@ -160,7 +178,9 @@ if __name__ == "__main__":
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument("--plan", action="store_true", help="predict a window-test.sh run")
     mode.add_argument("--series", metavar="HH:MM:SS", help="predict a series-test.sh run starting then")
+    mode.add_argument("--at", metavar="HH:MM:SS,...", help="predict single requests at these times")
     mode.add_argument("--compare", metavar="TEST", help="score each request of a finished run")
+    ap.add_argument("--burst-at", metavar="HH:MM:SS", help="with --at: then requests back to back from this time")
     ap.add_argument("--p-offset", type=float, default=-600)
     ap.add_argument("--a-offset", type=float, default=30)
     ap.add_argument("--b-offset", type=float, default=105)
@@ -172,6 +192,8 @@ if __name__ == "__main__":
         plan(history, args.p_offset, args.a_offset, args.b_offset, args.spacing)
     elif args.series:
         series(history, args.series, args.spacing)
+    elif args.at:
+        at(history, args.at, args.burst_at, args.spacing)
     else:
         compare(history, parse(args.compare))
     sys.exit(0)
