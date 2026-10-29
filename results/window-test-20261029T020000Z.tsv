@@ -1,0 +1,31 @@
+# window-test.sh sha256=223814aa0f07 url=https://gitlab.com/api/v4/version p=2026-10-29T01:50:00Z a=2026-10-29T02:00:30Z b=2026-10-29T02:01:45Z ip_id=e0a6c7f096e7
+step	n	utc	status	ratelimit_name	retry_after
+P	1	2026-10-29T01:50:00.610Z	429	unauthenticated_traffic_per_ip	600
+A	1	2026-10-29T02:00:30.092Z	429	unauthenticated_traffic_per_ip	3570
+B	1	2026-10-29T02:01:45.558Z	401	throttle_unauthenticated_api	
+B	2	2026-10-29T02:01:46.016Z	401	throttle_unauthenticated_api	
+B	3	2026-10-29T02:01:46.407Z	401	throttle_unauthenticated_api	
+B	4	2026-10-29T02:01:46.822Z	401	throttle_unauthenticated_api	
+B	5	2026-10-29T02:01:47.219Z	401	throttle_unauthenticated_api	
+B	6	2026-10-29T02:01:47.606Z	401	throttle_unauthenticated_api	
+B	7	2026-10-29T02:01:48.003Z	401	throttle_unauthenticated_api	
+B	8	2026-10-29T02:01:48.395Z	401	throttle_unauthenticated_api	
+B	9	2026-10-29T02:01:48.788Z	401	throttle_unauthenticated_api	
+B	10	2026-10-29T02:01:49.182Z	401	throttle_unauthenticated_api	
+B	11	2026-10-29T02:01:49.577Z	401	throttle_unauthenticated_api	
+B	12	2026-10-29T02:01:49.988Z	401	throttle_unauthenticated_api	
+B	13	2026-10-29T02:01:50.394Z	401	throttle_unauthenticated_api	
+B	14	2026-10-29T02:01:50.805Z	401	throttle_unauthenticated_api	
+B	15	2026-10-29T02:01:51.265Z	401	throttle_unauthenticated_api	
+B	16	2026-10-29T02:01:51.645Z	401	throttle_unauthenticated_api	
+B	17	2026-10-29T02:01:52.042Z	401	throttle_unauthenticated_api	
+B	18	2026-10-29T02:01:52.454Z	401	throttle_unauthenticated_api	
+B	19	2026-10-29T02:01:52.848Z	401	throttle_unauthenticated_api	
+B	20	2026-10-29T02:01:53.245Z	401	throttle_unauthenticated_api	
+B	21	2026-10-29T02:01:53.624Z	401	throttle_unauthenticated_api	
+B	22	2026-10-29T02:01:54.016Z	401	throttle_unauthenticated_api	
+B	23	2026-10-29T02:01:54.406Z	401	throttle_unauthenticated_api	
+B	24	2026-10-29T02:01:54.817Z	401	throttle_unauthenticated_api	
+B	25	2026-10-29T02:01:55.217Z	401	throttle_unauthenticated_api	
+B	26	2026-10-29T02:01:55.610Z	429		60
+# ended=2026-10-29T02:01:55Z ip_id=e0a6c7f096e7

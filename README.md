@@ -10,7 +10,7 @@ GitLab.com announced plan-based rate limits for Free and unauthenticated traffic
 
 Write-up: [DevOps Daily](https://devops-daily.com/posts/) (link updated when the post is live).
 
-## What we measured (2026-10-28, one IP)
+## What we measured (2026-10-28 and 29, one IP)
 
 | Run | Requests | Result |
 | --- | --- | --- |
@@ -21,6 +21,7 @@ Write-up: [DevOps Daily](https://devops-daily.com/posts/) (link updated when the
 | `results/blocked-check-20261028T225508Z.tsv` | one request each to six targets while blocked | `gitlab-org` and `inkscape` projects: 200; two personal projects and `/api/v4/version`: 429 |
 | `results/count-test-20261028T230045Z.tsv` | `count-test.sh` 45 s after the hour | still blocked: `gitlab-org` 200, everything else 429 with `Retry-After` pointing to midnight |
 | `results/unblock-watch-20261028T230207Z.tsv` | one request every 3 minutes | 429 until 23:35:12, not limited at 23:38:12: the block lasted 41 to 44 minutes |
+| `results/count-test-20261029T010045Z.tsv` | `count-test.sh` from a clean start, 01:00:45 UTC on 2026-10-29 | 10 × 200 from `gitlab-org`, 10 × 401 from `/api/v4/version`, then exactly 50 × 200 from the personal project before the 429, as predicted: `gitlab-org` requests did not count, and the 401s did |
 
 The first API run was made with an earlier copy of the probe loop, before it became `probe.sh`, and the blocked check was a one-off loop, so those two files have no hash stamp. The other script-written files are stamped with the hash of the script that wrote them. The scripts have changed since (shared `lib.sh`, final status from curl's write-out); the hash in each file names the version that produced it.
 
@@ -30,6 +31,8 @@ The headers of a successful response never mention the new limit: the last 200 b
 
 - `probe.sh api|raw [count]` sends requests with a one-second pause between them and writes status, CDN cache status, `RateLimit-Name`, `RateLimit-Limit`, `RateLimit-Remaining` and `Retry-After` per request to `results/`. Raw-file probes add a cache-busting query unless `CACHE=1`, because a cached response never reaches the rate limiter. `PROJECT=` picks the project; `GITLAB_TOKEN=` sends a token.
 - `count-test.sh` checks which anonymous requests count toward the hourly limit. It needs a clean start: an IP that is not blocked and has sent no anonymous GitLab.com requests for at least an hour, because a block can outlast the hour it started in. It reports the run as inconclusive if the first steps are already limited.
+- `window-test.sh` checks whether the hourly limit is counted per clock hour or over the last 60 minutes. Run it right after `count-test.sh` has blocked the IP. It sends one request 10 minutes before the next full hour, one 30 seconds after it, and a burst from 105 seconds after it until the first 429. At the start and the end it records an HMAC of the public IPv4 address, keyed with a local secret, to show the address did not change without publishing it.
+- `predict-window.py` says what three counting models expect from that run (`--plan`), and afterwards compares each request with them.
 - `find_anon_calls.py` finds curl, wget, PowerShell, Dockerfile `ADD` and similar calls to `gitlab.com`, `$CI_SERVER_URL` or `$CI_API_V4_URL` that carry no token, and says what to use instead. Git over HTTPS is skipped: it is not counted against the anonymous limit. Exits 1 on findings, so it can run in CI. It assumes `$CI_SERVER_URL` is gitlab.com.
 - `glcurl` is a curl wrapper that logs one JSON line per call (time, egress, caller, path, final status, number of HTTP responses including followed redirects, rate-limit headers) without logging the token. Set `GLCURL_EGRESS` to the public IP or NAT the machine leaves from, and `GLCURL_CALLER` to the GitLab user behind a token. It accepts one URL per call and refuses `--retry`, so every request ends up in the log.
 - `budget.py` reads those logs and reports each caller's busiest 60-second and 3,600-second window against `limits.json`. Anonymous requests are grouped by egress, because the anonymous limit is per IP; token requests by caller, because plan limits are per user. The sliding windows are a budgeting model: GitLab does not document its counting rule, and we could not determine it.

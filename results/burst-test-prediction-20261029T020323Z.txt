@@ -1,0 +1,10 @@
+# written 2026-10-29T02:03:23Z, before burst-test.sh ran
+window-test-20261029T020000Z.tsv: B1-B25 (02:01:45 to 02:01:55) were allowed, B26 got a 429
+with no RateLimit-Name and Retry-After: 60. P and A got 429s from unauthenticated_traffic_per_ip.
+
+If B1-B25 count, 429s do not, and nothing else counted since 01:02:27, the hourly limit
+has 35 requests left before 03:01:45, under both the sliding and the clock-hour model.
+C: back to back until the first 429. If B26's limit is a burst limit, C stops after
+   about 25 with the same unnamed 429 and Retry-After: 60.
+D: if C got k successes, D gets 35 - k successes, then a 429 named
+   unauthenticated_traffic_per_ip with Retry-After pointing to 03:00:00.
