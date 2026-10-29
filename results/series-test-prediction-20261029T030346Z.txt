@@ -1,0 +1,12 @@
+# written 2026-10-29T03:03:46Z, before the second series-test.sh run
+# The first series hit the Cloudflare 429 at request 26 again (all 401s), so it could not tell
+# sliding from anchored. This one uses 200s from a personal project (counted, and 50 of them
+# in a row did not trip Cloudflare in the count test), from 03:04:00, before D1 (02:04:53) leaves
+# a sliding window.
+$ python3 predict-window.py --series 03:04:00 --interval 1.9 results/count-test-20261029T010045Z.tsv results/window-test-20261029T020000Z.tsv results/burst-test-20261029T020328Z.tsv results/burst-test-20261029T020555Z.tsv results/burst-test-20261029T021742Z.tsv results/series-test-20261029T030200Z.tsv
+history: 145 counted requests, 01:01:01 to 03:02:46
+series from 03:04:00 every 1.9 s
+  fixed    35 allowed before the first 429
+  sliding  25 allowed before the first 429
+  approx   0 allowed before the first 429
+  anchored 35 allowed before the first 429

@@ -1,2 +1,29 @@
 # series-test.sh sha256=1e65d7d92ba2 url=https://gitlab.com/api/v4/version start=2026-10-29T03:02:00Z
 step	n	utc	status	ratelimit_name	retry_after	utc_end
+S	1	2026-10-29T03:02:00.503Z	401	throttle_unauthenticated_api		2026-10-29T03:02:00.892Z
+S	2	2026-10-29T03:02:02.400Z	401	throttle_unauthenticated_api		2026-10-29T03:02:02.839Z
+S	3	2026-10-29T03:02:04.344Z	401	throttle_unauthenticated_api		2026-10-29T03:02:04.726Z
+S	4	2026-10-29T03:02:06.230Z	401	throttle_unauthenticated_api		2026-10-29T03:02:06.610Z
+S	5	2026-10-29T03:02:08.118Z	401	throttle_unauthenticated_api		2026-10-29T03:02:08.596Z
+S	6	2026-10-29T03:02:10.101Z	401	throttle_unauthenticated_api		2026-10-29T03:02:10.491Z
+S	7	2026-10-29T03:02:11.996Z	401	throttle_unauthenticated_api		2026-10-29T03:02:12.392Z
+S	8	2026-10-29T03:02:13.899Z	401	throttle_unauthenticated_api		2026-10-29T03:02:14.326Z
+S	9	2026-10-29T03:02:15.831Z	401	throttle_unauthenticated_api		2026-10-29T03:02:16.242Z
+S	10	2026-10-29T03:02:17.747Z	401	throttle_unauthenticated_api		2026-10-29T03:02:18.129Z
+S	11	2026-10-29T03:02:19.637Z	401	throttle_unauthenticated_api		2026-10-29T03:02:20.072Z
+S	12	2026-10-29T03:02:21.577Z	401	throttle_unauthenticated_api		2026-10-29T03:02:21.954Z
+S	13	2026-10-29T03:02:23.459Z	401	throttle_unauthenticated_api		2026-10-29T03:02:23.857Z
+S	14	2026-10-29T03:02:25.365Z	401	throttle_unauthenticated_api		2026-10-29T03:02:25.856Z
+S	15	2026-10-29T03:02:27.361Z	401	throttle_unauthenticated_api		2026-10-29T03:02:27.758Z
+S	16	2026-10-29T03:02:29.263Z	401	throttle_unauthenticated_api		2026-10-29T03:02:29.652Z
+S	17	2026-10-29T03:02:31.160Z	401	throttle_unauthenticated_api		2026-10-29T03:02:31.609Z
+S	18	2026-10-29T03:02:33.114Z	401	throttle_unauthenticated_api		2026-10-29T03:02:33.504Z
+S	19	2026-10-29T03:02:35.009Z	401	throttle_unauthenticated_api		2026-10-29T03:02:35.388Z
+S	20	2026-10-29T03:02:36.893Z	401	throttle_unauthenticated_api		2026-10-29T03:02:37.296Z
+S	21	2026-10-29T03:02:38.801Z	401	throttle_unauthenticated_api		2026-10-29T03:02:39.192Z
+S	22	2026-10-29T03:02:40.697Z	401	throttle_unauthenticated_api		2026-10-29T03:02:41.086Z
+S	23	2026-10-29T03:02:42.594Z	401	throttle_unauthenticated_api		2026-10-29T03:02:43.038Z
+S	24	2026-10-29T03:02:44.543Z	401	throttle_unauthenticated_api		2026-10-29T03:02:44.954Z
+S	25	2026-10-29T03:02:46.459Z	401	throttle_unauthenticated_api		2026-10-29T03:02:46.876Z
+S	26	2026-10-29T03:02:48.384Z	429		60	2026-10-29T03:02:48.653Z
+# ended=2026-10-29T03:02:48Z
