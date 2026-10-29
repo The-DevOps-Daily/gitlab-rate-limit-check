@@ -266,6 +266,7 @@ class Window(unittest.TestCase):
         rows = [l.split("\t") for l in read(tmp, name).splitlines() if not l.startswith(("#", "step"))]
         self.assertEqual([(r[0], r[3]) for r in rows], [("P", "200"), ("A", "200"), ("B", "200"), ("B", "429")])
         self.assertIn("ended=", read(tmp, name))
+        self.assertIn("ip_id=unverified", read(tmp, name))
 
 
 if __name__ == "__main__":

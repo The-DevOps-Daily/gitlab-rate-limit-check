@@ -1,0 +1,2 @@
+# series-test.sh sha256=1e65d7d92ba2 url=https://gitlab.com/api/v4/version start=2026-10-29T03:02:00Z
+step	n	utc	status	ratelimit_name	retry_after	utc_end

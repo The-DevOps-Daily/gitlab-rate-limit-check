@@ -11,14 +11,14 @@ mkdir -p "$results"
 export OUT="$results/parallel-burst-$(date -u +%Y%m%dT%H%M%SZ).tsv"
 echo "# parallel-burst.sh sha256=$(sha256sum parallel-burst.sh | cut -c1-12) url=$URL n=$n p=$p started=$(date -u +%FT%TZ)" > "$OUT"
 printf 'n\tutc\tstatus\tratelimit_name\tretry_after\tserver\n' >> "$OUT"
+. ./lib.sh
 one() {
-  local t h
+  local t
   t=$(date -u +%FT%T.%3NZ)
-  h=$(curl -q -4 -s -o /dev/null -D - "$URL" | tr -d '\r')
-  get() { awk -v k="$1" 'tolower($1) == tolower(k ":") { print $2 }' <<<"$h"; }
-  printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$1" "$t" "$(awk 'NR == 1 { print $2 }' <<<"$h")" "$(get ratelimit-name)" "$(get retry-after)" "$(get server)" >> "$OUT"
+  fetch -4 "$URL"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$1" "$t" "$status" "$(header ratelimit-name)" "$(header retry-after)" "$(header server)" >> "$OUT"
 }
-export -f one
+export -f fetch header one
 seq 1 "$n" | xargs -P "$p" -I{} bash -c 'one {}'
 echo "# ended=$(date -u +%FT%TZ)" >> "$OUT"
 echo "$OUT"

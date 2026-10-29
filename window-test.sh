@@ -15,13 +15,16 @@ url=${URL:-https://gitlab.com/api/v4/version}
 hour=$(( ($(date +%s) / 3600 + 1) * 3600 ))
 p=$(( hour + ${P_OFFSET:--600} )) a=$(( hour + ${A_OFFSET:-30} )) b=$(( hour + ${B_OFFSET:-105} ))
 
-# Proves the public IPv4 address did not change during the run without
+# Shows the public IPv4 address was the same at the start and the end without
 # recording it: an HMAC with a local secret that is not in this repository.
+# "unverified" if the lookup failed.
 secret=${IP_SECRET_FILE:-$HOME/.config/gitlab-rate-limit-check.secret}
 [[ -s $secret ]] || (umask 077; head -c 32 /dev/urandom | base64 > "$secret")
 ip_id() {
-  curl -q -4 -s -m 10 "${IP_CHECK_URL:-https://www.cloudflare.com/cdn-cgi/trace}" | sed -n 's/^ip=//p' |
-    openssl dgst -sha256 -hmac "$(cat "$secret")" | awk '{ print substr($NF, 1, 12) }'
+  local ip
+  ip=$(curl -q -4 -s -m 10 "${IP_CHECK_URL:-https://www.cloudflare.com/cdn-cgi/trace}" | sed -n 's/^ip=//p') || true
+  [[ $ip =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3}$ ]] || { echo unverified; return; }
+  echo "$ip" | openssl dgst -sha256 -hmac "$(cat "$secret")" | awk '{ print substr($NF, 1, 12) }'
 }
 
 results=${RESULTS:-results}
