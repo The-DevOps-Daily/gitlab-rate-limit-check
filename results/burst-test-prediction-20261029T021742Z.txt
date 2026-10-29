@@ -1,0 +1,7 @@
+# written 2026-10-29T02:17:42Z, before the third burst-test.sh run
+The 401 bursts (/api/v4/version) hit the Cloudflare 429 at request 26; the 200 bursts
+(gitlab-org/gitlab-runner) did not, even at 60 in 8 s. That changed the route and the status
+at once. This run keeps the project (gitlab-org/gitlab-runner, not counted by the hourly
+limit) and changes only the status: a missing file through the files API, so 404s.
+- if the Cloudflare limit counts error responses, C stops at about request 26 with it;
+- if it is specific to the route, C gets 60 x 404.
